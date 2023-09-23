@@ -2,11 +2,10 @@ trigger:
 - '*'
 
 pool:
-  name: 'Default' # Replace Default with the name of your agent pool if you used a different pool
+  name: 'Default'
 
 variables:
   buildConfiguration: 'Release'
-  debugConfiguration: 'Debug'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '6.x'
 
@@ -14,7 +13,6 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
-    packageType: sdk
     version: '$(dotnetSdkVersion)'
 
 - task: Npm@1
@@ -53,14 +51,6 @@ steps:
     publishWebProjects: false
     arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
     zipAfterPublish: true
-
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Debug'
-
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Release'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
